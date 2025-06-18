@@ -12,26 +12,45 @@ setup_logging "install-phpmyadmin"
 update_system
 install_packages phpmyadmin
 
-log_step "Linking phpMyAdmin to /var/www/html/phpmyadmin..."
-if [ ! -L "/var/www/html/phpmyadmin" ]; then
-    sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
-    log_success "Symlink created: /var/www/html/phpmyadmin -> /usr/share/phpmyadmin"
-else
-    log_info "Symlink already exists: /var/www/html/phpmyadmin"
-fi
+log_step "Configuring phpMyAdmin for Nginx..."
 
-log_step "No custom Nginx config needed. phpMyAdmin will be available at /phpmyadmin using the default PHP handler."
+# Create Nginx config for phpMyAdmin
+NGINX_CONF="/etc/nginx/snippets/phpmyadmin.conf"
+sudo tee "$NGINX_CONF" > /dev/null <<EOL
+location /phpmyadmin {
+    root /usr/share/;
+    index index.php index.html index.htm;
+    location ~ ^/phpmyadmin/(.+\.php)$ {
+        try_files $uri =404;
+        root /usr/share/;
+        fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+    location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+        root /usr/share/;
+    }
+}
+EOL
 
-# Optionally prompt to remove old snippet and config if present
-if [ -f "/etc/nginx/snippets/phpmyadmin.conf" ]; then
-    if prompt_yes_no "Remove old phpmyadmin.conf Nginx snippet and config include?" "y"; then
-        sudo rm -f /etc/nginx/snippets/phpmyadmin.conf
-        sudo sed -i '/include snippets\/phpmyadmin.conf;/d' /etc/nginx/sites-available/default 2>/dev/null || true
-        log_success "Old phpmyadmin.conf snippet and config include removed."
+log_step "Include the phpMyAdmin config in your Nginx site configuration, e.g.:"
+echo -e "    include snippets/phpmyadmin.conf;"
+
+# Prompt to add to default Nginx site
+if prompt_yes_no "Add phpMyAdmin endpoint to the default Nginx site?" "y"; then
+    DEFAULT_SITE="/etc/nginx/sites-available/default"
+    backup_file "$DEFAULT_SITE"
+    if ! grep -q "include snippets/phpmyadmin.conf;" "$DEFAULT_SITE"; then
+        sudo sed -i '/server_name _;/a \\n    include snippets/phpmyadmin.conf;' "$DEFAULT_SITE"
+        log_success "phpMyAdmin config included in default Nginx site."
+    else
+        log_info "phpMyAdmin config already included in default Nginx site."
     fi
+    restart_service nginx
 fi
 
 enable_service nginx
 restart_service nginx
 
-log_success "phpMyAdmin installation and configuration complete! Access it at /phpmyadmin." 
+log_success "phpMyAdmin installation and Nginx configuration complete!" 
