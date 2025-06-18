@@ -20,14 +20,16 @@ sudo tee "$NGINX_CONF" > /dev/null <<EOL
 location /phpmyadmin {
     root /usr/share/;
     index index.php index.html index.htm;
+
     location ~ ^/phpmyadmin/(.+\.php)$ {
-        try_files $uri $uri/ /phpmyadmin/index.php?$args;
+        try_files $uri =404;
         root /usr/share/;
         fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
         fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $request_filename;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
+
     location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
         root /usr/share/;
     }
