@@ -57,6 +57,12 @@ show_main_menu() {
     echo -e "     ${BLUE}├─${NC} Zsh shell with Oh My Zsh framework"
     echo -e "     ${BLUE}└─${NC} Laravel aliases and productivity tools"
     echo
+    echo -e "${GREEN}  8)${NC} ${CYAN}🗄️  INSTALL PHPMYADMIN${NC} │ Install phpMyAdmin with Nginx"
+    echo -e "     ${BLUE}└─${NC} phpMyAdmin web interface for MySQL/MariaDB"
+    echo
+    echo -e "${GREEN}  9)${NC} ${CYAN}🗄️  INSTALL PGADMIN${NC}   │ Install pgAdmin with Nginx"
+    echo -e "     ${BLUE}└─${NC} pgAdmin web interface for PostgreSQL"
+    echo
     echo -e "${GREEN}  0)${NC} ${RED}❌ EXIT${NC}             │ Exit setup"
     echo
     draw_separator
@@ -103,7 +109,7 @@ show_component_menu() {
 }
 
 prompt_user_choice() {
-    echo -ne "${YELLOW}➤ Select option${NC} ${BLUE}[1-7, 0 to exit]${NC}: "
+    echo -ne "${YELLOW}➤ Select option${NC} ${BLUE}[1-9, 0 to exit]${NC}: "
     read -r user_choice
 }
 
@@ -331,6 +337,40 @@ main_menu() {
                 read -r
                 continue
                 ;;
+            8)
+                clear_screen
+                draw_header
+                echo -e "${YELLOW}🗄️  PHPMYADMIN INSTALLATION${NC}"
+                draw_separator
+                echo
+                if ! check_root; then
+                    echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                    read -r
+                    continue
+                fi
+                bash features/install_phpmyadmin.sh
+                echo
+                echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                read -r
+                continue
+                ;;
+            9)
+                clear_screen
+                draw_header
+                echo -e "${YELLOW}🗄️  PGADMIN INSTALLATION${NC}"
+                draw_separator
+                echo
+                if ! check_root; then
+                    echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                    read -r
+                    continue
+                fi
+                bash features/install_pgadmin.sh
+                echo
+                echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                read -r
+                continue
+                ;;
             0)
                 clear_screen
                 echo -e "${GREEN}Thank you for using Server Automation Suite! 👋${NC}"
@@ -338,7 +378,7 @@ main_menu() {
                 exit 0
                 ;;
             *)
-                echo -e "${RED}Invalid choice. Please select 1-7 or 0 to exit.${NC}"
+                echo -e "${RED}Invalid choice. Please select 1-9 or 0 to exit.${NC}"
                 sleep 1
                 continue
                 ;;
