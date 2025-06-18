@@ -18,15 +18,18 @@ log_step "Configuring Adminer for Nginx..."
 NGINX_CONF="/etc/nginx/snippets/adminer.conf"
 if [ ! -f "$NGINX_CONF" ]; then
     sudo tee "$NGINX_CONF" > /dev/null <<EOL
-location /adminer {
+location /adminer/ {
     alias /usr/share/adminer/;
     index index.php;
-    location ~ ^/adminer/(.+\.php)$ {
-        fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+    try_files $uri $uri/ =404;
+}
+
+location ~ ^/adminer/(.+\.php)$ {
+    alias /usr/share/adminer/$1;
+    fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $request_filename;
+    include fastcgi_params;
 }
 EOL
     log_info "Created Nginx snippet for Adminer."
