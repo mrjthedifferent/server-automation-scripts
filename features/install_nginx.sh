@@ -38,8 +38,6 @@ NGINX_SETTINGS=(
   "proxy_connect_timeout 60s;"
   "proxy_send_timeout 60s;"
   "server_tokens off;"
-  "gzip on;"
-  "gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;"
 )
 
 for SETTING in "${NGINX_SETTINGS[@]}"; do
