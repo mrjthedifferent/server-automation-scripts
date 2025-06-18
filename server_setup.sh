@@ -63,6 +63,9 @@ show_main_menu() {
     echo -e "${GREEN}  9)${NC} ${CYAN}🗄️  INSTALL PGADMIN${NC}   │ Install pgAdmin with Nginx"
     echo -e "     ${BLUE}└─${NC} pgAdmin web interface for PostgreSQL"
     echo
+    echo -e "${GREEN} 10)${NC} ${CYAN}🗄️  INSTALL ADMINER${NC}   │ Install Adminer with Nginx"
+    echo -e "     ${BLUE}└─${NC} Adminer lightweight DB management"
+    echo
     echo -e "${GREEN}  0)${NC} ${RED}❌ EXIT${NC}             │ Exit setup"
     echo
     draw_separator
@@ -109,7 +112,7 @@ show_component_menu() {
 }
 
 prompt_user_choice() {
-    echo -ne "${YELLOW}➤ Select option${NC} ${BLUE}[1-9, 0 to exit]${NC}: "
+    echo -ne "${YELLOW}➤ Select option${NC} ${BLUE}[1-10, 0 to exit]${NC}: "
     read -r user_choice
 }
 
@@ -371,6 +374,23 @@ main_menu() {
                 read -r
                 continue
                 ;;
+            10)
+                clear_screen
+                draw_header
+                echo -e "${YELLOW}🗄️  ADMINER INSTALLATION${NC}"
+                draw_separator
+                echo
+                if ! check_root; then
+                    echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                    read -r
+                    continue
+                fi
+                bash features/install_adminer.sh
+                echo
+                echo -ne "${YELLOW}Press ENTER to continue...${NC}"
+                read -r
+                continue
+                ;;
             0)
                 clear_screen
                 echo -e "${GREEN}Thank you for using Server Automation Suite! 👋${NC}"
@@ -378,7 +398,7 @@ main_menu() {
                 exit 0
                 ;;
             *)
-                echo -e "${RED}Invalid choice. Please select 1-9 or 0 to exit.${NC}"
+                echo -e "${RED}Invalid choice. Please select 1-10 or 0 to exit.${NC}"
                 sleep 1
                 continue
                 ;;
