@@ -20,8 +20,7 @@ if [ ! -f "$NGINX_CONF" ]; then
     sudo tee "$NGINX_CONF" > /dev/null <<EOL
 location /adminer/ {
     alias /usr/share/adminer/;
-    index index.php;
-    try_files $uri $uri/ =404;
+    try_files $uri $uri/ /adminer/index.php?$args;
 }
 
 location ~ ^/adminer/(.+\.php)$ {
