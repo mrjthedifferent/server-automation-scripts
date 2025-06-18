@@ -432,4 +432,25 @@ export -f prompt_with_default prompt_yes_no
 export -f install_component
 export -f setup_firewall setup_monitoring setup_backups
 export -f generate_nginx_config generate_supervisor_config
-export -f validate_laravel_path get_system_info init_common 
+export -f validate_laravel_path get_system_info init_common
+
+# Utility UI functions (moved from server_setup.sh)
+clear_screen() {
+    clear
+    echo
+}
+
+draw_header() {
+    echo -e "${CYAN}╔══════════════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}║                                                                              ║${NC}"
+    echo -e "${CYAN}║${YELLOW}                     🚀 SERVER AUTOMATION SUITE 🚀                          ${CYAN}║${NC}"
+    echo -e "${CYAN}║                                                                              ║${NC}"
+    echo -e "${CYAN}║${GREEN}                   Professional Server Setup & Management                   ${CYAN}║${NC}"
+    echo -e "${CYAN}║                                                                              ║${NC}"
+    echo -e "${CYAN}╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
+    echo
+}
+
+draw_separator() {
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+} 

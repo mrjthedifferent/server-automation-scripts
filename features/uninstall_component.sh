@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Define clear_screen for standalone use
-clear_screen() {
-    clear
-    echo
-}
-
 # Universal Uninstall Script for Server Automation Suite
 # Supports: nginx, php, mysql, pgsql, redis, node, composer, supervisor, fail2ban, certbot, logrotate, phpmyadmin, pgadmin, adminer, docker, ohmyzsh
 

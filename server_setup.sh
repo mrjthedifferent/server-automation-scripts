@@ -5,26 +5,6 @@ source "$(dirname "$0")/lib/common.sh"
 init_common
 
 # Advanced menu functions
-clear_screen() {
-    clear
-    echo
-}
-
-draw_header() {
-    echo -e "${CYAN}╔══════════════════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                                                                              ║${NC}"
-    echo -e "${CYAN}║${YELLOW}                     🚀 SERVER AUTOMATION SUITE 🚀                          ${CYAN}║${NC}"
-    echo -e "${CYAN}║                                                                              ║${NC}"
-    echo -e "${CYAN}║${GREEN}                   Professional Server Setup & Management                   ${CYAN}║${NC}"
-    echo -e "${CYAN}║                                                                              ║${NC}"
-    echo -e "${CYAN}╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
-    echo
-}
-
-draw_separator() {
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-}
-
 show_main_menu() {
     clear_screen
     draw_header
