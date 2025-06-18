@@ -21,7 +21,7 @@ location /phpmyadmin {
     root /usr/share/;
     index index.php index.html index.htm;
     location ~ ^/phpmyadmin/(.+\.php)$ {
-        try_files $uri =404;
+        try_files $uri $uri/ /phpmyadmin/index.php?$args;
         root /usr/share/;
         fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
         fastcgi_index index.php;
