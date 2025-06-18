@@ -21,9 +21,9 @@ if [ ! -f "$NGINX_CONF" ]; then
 location /adminer {
     root /usr/share/adminer/;
     index index.php index.html index.htm;
+    try_files $uri $uri/ /adminer/adminer.php?$args;
 
     location ~ ^/adminer/(.+\.php)$ {
-        try_files $uri =404;
         root /usr/share/adminer/;
         fastcgi_pass unix:/var/run/php/php${DEFAULT_PHP_VERSION}-fpm.sock;
         fastcgi_index index.php;
